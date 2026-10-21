@@ -15,6 +15,7 @@ async def proxy(path: str, req: Request):
         url += "?" + req.url.query
     body = await req.body()
     headers = {k: v for k, v in req.headers.items() if k.lower() not in DROP_REQ}
+    headers["accept-encoding"] = "gzip"
     try:
         async with httpx.AsyncClient(timeout=120, follow_redirects=False) as client:
             r = await client.request(req.method, url, content=body, headers=headers)
